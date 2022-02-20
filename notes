@@ -1,0 +1,10 @@
+CS 4550 Compilers
+
+hw1 1b
+	all strings of lowercase letters that start with a and end with b
+		grammar
+			S -> aGb
+			G -> a|b|c|...|z|GG|""
+			
+		automata
+			(S) -a-> ( ) -b-> ( ) the rest is on paper
