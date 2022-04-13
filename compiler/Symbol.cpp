@@ -1,25 +1,27 @@
 #include "Symbol.h"
 
-SymbolTableClass::SymbolTableClass()
-	: mTable() {
+SymbolTableClass::SymbolTableClass() {
 	
 }
 
 bool SymbolTableClass::Exists(const std::string & s) { 
 // returns true if <s> is already in the symbol table.
-	Variable S = s;
-	if (std::find(mTable.begin(), mTable.end(), s) != mTable.end()) {
-		return true;
-	} else {
-		return false;
+	for(unsigned int i=0; i<mTable.size(); i++) {
+		if (mTable[i].mLabel == s) {
+			return true;	
+		}
 	}
+	return false;
 } 
 
 void SymbolTableClass::AddEntry(const std::string & s) { 
 // adds <s> to the symbol table, 
 // or quits if it was already there
 	if (!Exists(s)) {
-		mTable.push_back(s);
+		Variable v;
+		v.mLabel = s;
+		v.mValue = 0;
+		mTable.push_back(v);
 	} else {
 		exit(1);
 	}
@@ -29,9 +31,11 @@ int SymbolTableClass::GetValue(const std::string & s) {
 // interpreting. Meaningless for Coding and Executing.
 // Prints a message and quits if variable s does not exist.
 	if (Exists(s)) {
-		return mTable[s].mValue;
+		int i = GetIndex(s);
+		// std::cout << "Label: " << mTable[i].mLabel << ", value: " << mTable[i].mValue << std::endl;
+		return mTable[i].mValue;
 	} else {
-		std::cout << s << " does not exist." << std::endl;
+		std::cout << "'" << s << "' does not exist." << std::endl;
 		exit(1);
 	}
 } 
@@ -41,7 +45,8 @@ void SymbolTableClass::SetValue(const std::string & s, int v) {
 // Meaningless for Coding and Executing.
 // Prints a message and quits if variable s does not exist.
 	if (Exists(s)) {
-		mTable[s.mValue] = v;
+		int i = GetIndex(s);
+		mTable[i].mValue = v;
 	} else {
 		std::cout << s << " does not exist." << std::endl;
 		exit(1);
@@ -51,14 +56,13 @@ void SymbolTableClass::SetValue(const std::string & s, int v) {
 int SymbolTableClass::GetIndex(const std::string & s) { 
 // returns the index of where variable <s> is.
 // returns -1 if variable <s> is not there.
-	auto it = find(mTable.begin(), mTable.end(), s);
-	if (it != mTable.end()) {
-		int index = it - mTable.begin();
-		return index;
-	} else {
-		return -1;
+	for(unsigned int i=0; i<mTable.size(); i++) {
+		if (mTable[i].mLabel == s) {
+			return i;	
+		}
 	}
-} 
+	return -1;
+}
 
 int SymbolTableClass::GetCount() { 
 // returns the current number of variables in the symbol

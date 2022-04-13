@@ -19,12 +19,12 @@ StateMachineClass::StateMachineClass()
 		mLegalMoves[COMMENTLINE_STATE][i] = COMMENTLINE_STATE;
 	}
 	
-	for (int i = 0; i < LAST_CHAR; i++) {
-	mLegalMoves[NEWLINE_STATE][i] = START_STATE;
-	}
+	// for (int i = 0; i < LAST_CHAR; i++) {
+	// mLegalMoves[NEWLINE_STATE][i] = START_STATE;
+	// }
 		
 	mLegalMoves[START_STATE][WHITESPACE_CHAR] = START_STATE;
-	mLegalMoves[START_STATE][NEWLINE_CHAR] = NEWLINE_STATE;
+	mLegalMoves[START_STATE][NEWLINE_CHAR] = START_STATE;
 	
 	mLegalMoves[START_STATE][DIGIT_CHAR] = INTEGER_STATE;
 	mLegalMoves[INTEGER_STATE][DIGIT_CHAR] = INTEGER_STATE;
@@ -34,6 +34,8 @@ StateMachineClass::StateMachineClass()
 	mLegalMoves[IDENTIFIER_STATE][DIGIT_CHAR] = IDENTIFIER_STATE;
 		
 	mLegalMoves[START_STATE][PLUS_CHAR] = PLUS_STATE;
+	
+	mLegalMoves[PLUS_STATE][EQUAL_CHAR] = PLUSEQUAL_STATE;
 	
 	mLegalMoves[START_STATE][MINUS_CHAR] = MINUS_STATE;
 		
@@ -51,9 +53,11 @@ StateMachineClass::StateMachineClass()
 	mLegalMoves[START_STATE][DIVIDE_CHAR] = DIVIDE_STATE;
 	// commentline
 	mLegalMoves[DIVIDE_STATE][DIVIDE_CHAR] = COMMENTLINE_STATE;
-	mLegalMoves[COMMENTLINE_STATE][NEWLINE_CHAR] = NEWLINE_STATE;
+	mLegalMoves[COMMENTLINE_STATE][NEWLINE_CHAR] = START_STATE;
 	
 	mLegalMoves[START_STATE][TIMES_CHAR] = TIMES_STATE;
+	
+	mLegalMoves[TIMES_STATE][TIMES_CHAR] = EXPONENT_STATE;
 	// block comment
 	mLegalMoves[DIVIDE_STATE][TIMES_CHAR] = COMMENT_STATE;
 	mLegalMoves[COMMENT_STATE][TIMES_CHAR] = POSSIBLE_ENDCOMMENT_STATE;
@@ -90,8 +94,13 @@ StateMachineClass::StateMachineClass()
 	mCorrespondingTokenType[ASSIGNMENT_STATE] = ASSIGNMENT_TOKEN;
 	mCorrespondingTokenType[PLUS_STATE] = PLUS_TOKEN;
 	mCorrespondingTokenType[MINUS_STATE] = MINUS_TOKEN;
+	
+	mCorrespondingTokenType[PLUSEQUAL_STATE] = PLUSEQUAL_TOKEN;
+	
 	mCorrespondingTokenType[TIMES_STATE] = TIMES_TOKEN;
 	mCorrespondingTokenType[DIVIDE_STATE] = DIVIDE_TOKEN;
+	
+	mCorrespondingTokenType[EXPONENT_STATE] = EXPONENT_TOKEN;
 	
 	mCorrespondingTokenType[SEMICOLON_STATE] = SEMICOLON_TOKEN;
 	mCorrespondingTokenType[LPAREN_STATE] = LPAREN_TOKEN;
@@ -104,9 +113,12 @@ StateMachineClass::StateMachineClass()
 	mCorrespondingTokenType[BAD_STATE] = BAD_TOKEN;
 	mCorrespondingTokenType[ENDFILE_STATE] = ENDFILE_TOKEN;
 	
-	mCorrespondingTokenType[NEWLINE_STATE] = NEWLINE_TOKEN;
+	// mCorrespondingTokenType[NEWLINE_STATE] = NEWLINE_TOKEN;
 	
 	mCorrespondingTokenType[NOTEQUAL_STATE] = NOTEQUAL_TOKEN;
+	
+	mCorrespondingTokenType[OR_STATE] = OR_TOKEN;
+	mCorrespondingTokenType[AND_STATE] = AND_TOKEN;
 	
 }
 
@@ -147,6 +159,10 @@ MachineState StateMachineClass::UpdateState (char currentCharacter, TokenType & 
 		charType = RCURLY_CHAR;
 	if (currentCharacter=='!')
 		charType = NOT_CHAR;
+	if (currentCharacter=='&')
+		charType = AND_CHAR;
+	if (currentCharacter=='|')
+		charType = OR_CHAR;
 	if (currentCharacter=='\r' || currentCharacter=='\n')
 		charType = NEWLINE_CHAR;
 	if (currentCharacter==EOF)

@@ -9,16 +9,21 @@ TokenClass::TokenClass(TokenType type, const std::string & lexeme)
 void TokenClass::CheckReserved() {
 	if (mLexeme == "void") {
 		mType = VOID_TOKEN;
-	}
-	else if (mLexeme == "main") {
+	} else if (mLexeme == "main") {
 		mType = MAIN_TOKEN;
-	}
-	else if (mLexeme == "int") {
+	} else if (mLexeme == "int") {
 		mType = INT_TOKEN;
-	}
-	else if (mLexeme == "cout") {
+	} else if (mLexeme == "cout") {
 		mType = COUT_TOKEN;
-	}
+	} else if (mLexeme == "if") {
+		mType = IF_TOKEN;
+	} else if (mLexeme == "while") {
+		mType = WHILE_TOKEN;
+	} else if (mLexeme == "else") {
+		mType = ELSE_TOKEN;
+	} else if (mLexeme == "print") {
+		mType = PRINT_TOKEN;
+	} 
 }
 
 TokenType TokenClass::GetTokenType() const { 

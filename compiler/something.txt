@@ -1,0 +1,11 @@
+void main() {
+	int a;
+	a = 2;
+	
+	int b;
+	b = 4;
+	
+	if (a) {
+		print (a + b);
+	} 
+}
